@@ -1,0 +1,42 @@
+{% extends 'magazin_online/base.html' %}
+{% block content %}
+
+<h2>Profilul meu</h2>
+<p><strong>Utilizator:</strong> {{ request.user.username }}</p>
+<p><strong>Email:</strong> {{ request.user.email }}</p>
+<h3>Schimbă parola</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Schimbă parola</button>
+</form>
+
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+<h2>Comenzile mele</h2>
+
+{% if comenzi %}
+    {% for comanda in comenzi %}
+      <hr>
+      <p><strong>Comanda {{comanda.id}}</strong></p>
+      <p>Status comanda: {{comanda.status_comanda}}</p>
+      <p>Data: {{comanda.data_plasare}}</p>
+      <p><strong>Pret total: ${{comanda.pret_total}}</strong></p>
+      <p>Plata: {{comanda.platita}}</p>
+      <h4>Produse:</h4>
+      <ul>
+        {% for item in comanda.itemcomanda_set.all %}
+          <li>{{item.cantitate}} x {{item.produs.denumire}} - ${{item.produs.pret}}</li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}
+
+
+

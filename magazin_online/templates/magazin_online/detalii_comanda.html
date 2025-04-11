@@ -1,0 +1,28 @@
+{% extends 'magazin_online/base.html' %}
+{% block content %}
+
+<h2>Detalii Comanda</h2>
+<p><strong>Nume: </strong>{{comanda.nume_contact}}</p>
+<p><strong>Telefon: </strong>{{comanda.telefon_contact}}</p>
+<p><strong>Adresa: </strong>{{comanda.adresa_livrare}}</p>
+<p><strong>Metoda livrare: </strong>{{comanda.metoda_livrare}}</p>
+<p><strong>Metoda plata: </strong>{{comanda.metoda_plata}}</p>
+<p><strong>Total: </strong>${{comanda.pret_total}}</p>
+
+<h3>Produse</h3>
+<ul>
+    {% for item in comanda.itemcomanda_set.all %}
+        <li>{{ item.cantitate }} x {{ item.produs.denumire }} - ${{ item.produs.pret }}</li>
+    {% endfor %}
+</ul>
+
+{% if comanda.platita == 'Neefectuata' %}
+    <form method="post" action="{% url 'plateste_comanda' comanda.id %}">
+        {% csrf_token %}
+        <button type="submit">PLĂTIT</button>
+    </form>
+{% else %}
+    <p style="color:green;"><strong>Comanda este plătită.</strong></p>
+{% endif %}
+
+{% endblock %}

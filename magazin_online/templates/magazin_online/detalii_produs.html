@@ -1,0 +1,17 @@
+{% extends 'magazin_online/base.html' %}
+{% block content %}
+
+<h2>{{produs.denumire}}</h2>
+<p>{{produs.descriere}}</p>
+<form method="post" action="{% url 'adauga_in_cos' produs.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="hidden" name="produs" value="{{ produs.id }}">
+    <input type="number" name="cantitate" value="1">
+    <button type="submit">Adaugă în coș</button>
+</form>
+<p>Pret: ${{produs.pret}}</p>
+<img width="600" src="{{produs.imagine.url}}" alt="{{produs.denumire}}">
+
+
+{% endblock %}

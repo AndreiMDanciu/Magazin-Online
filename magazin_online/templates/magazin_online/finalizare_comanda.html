@@ -1,0 +1,11 @@
+{% extends 'magazin_online/base.html' %}
+{% block content %}
+
+<h2>Finalizare Comanda</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Trimite comanda</button>
+</form>
+
+{% endblock %}
