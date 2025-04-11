@@ -109,27 +109,18 @@ def cos(request):
 def finalizare_comanda(request):
     comanda = Comanda.objects.filter(user=request.user, status_comanda='deschisa').first()
 
-    # Verificăm dacă există o comandă deschisă și dacă aceasta are produse
     if not comanda or not comanda.itemcomanda_set.exists():
         return redirect('cos')
 
     if request.method == 'POST':
-        # Creăm și validăm formularul
         form = FinalizareComandaForm(request.POST, instance=comanda)
         if form.is_valid():
             comanda = form.save(commit=False)
-
-            # Calculăm totalul comenzii pe baza produselor
             comanda.pret_total = sum(item.produs.pret * item.cantitate for item in comanda.itemcomanda_set.all())
-
-            # Actualizăm statusul comenzii și o salvăm
             comanda.status_comanda = 'plasata'
             comanda.save()
-
-            # Creăm o comandă goală pentru utilizator
             Comanda.objects.create(user=request.user, status_comanda='deschisa')
 
-            # Redirecționăm la pagina de detalii comanda
             return redirect('detalii_comanda', comanda_id=comanda.id)
     else:
         form = FinalizareComandaForm(instance=comanda)
