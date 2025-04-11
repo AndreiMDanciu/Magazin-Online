@@ -91,8 +91,10 @@ def adauga_in_cos(request, produs_id):
 def sterge_din_cos(request, produs_id):
     produs = get_object_or_404(Produs, id=produs_id)
     comanda = Comanda.objects.filter(user=request.user, status_comanda='deschisa').first()
+
     if not comanda:
         return redirect('cos')
+
     item_comanda = ItemComanda.objects.filter(comanda = comanda, produs = produs).first()
     if item_comanda:
         item_comanda.delete()
